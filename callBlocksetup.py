@@ -53,12 +53,17 @@ class banker(object):
 
 class incomingCall(object):
     '''
-
+    representation of an incoming call
     '''
 
     def __init__(self, fromState, specialty, receivedTime, duration):
         '''
-
+        initializes a incoming call; saves all parameters as attributes 
+        of the instance.
+        fromState: which state the call is coming from
+        specialty: the specialty of the banker needed for the call
+        receivedTime: time the call was received (EST)
+        duration: how long the call lasted (must be a float longer than duration = 0)
         '''
         assert type(duration) == float and duration > 0
         self.fromState = fromState
@@ -78,3 +83,55 @@ class incomingCall(object):
 
     def callDuration(self):
         return self.duration
+
+
+class callRoom(object):
+    '''
+    representation of the call block (called a room)
+    '''
+
+    def __init__(self, bankersInRoom, startTime, dayTime):
+        '''
+        initializes a call block; saves all parameters as attributes of the instance
+        bankersInRoom: a list of bankers in the room for current hour
+        startTime: the starting hour of the call block (must be an float between 0 and 13)
+        dayTime: am or pm 
+        '''
+        self.bankersInRoom = bankersInRoom
+        assert type(startTime) == float and startTime in range(0,13)
+        self.startTime = startTime
+        self.dayTime = dayTime
+
+    def getBankers(incomingCall):
+       '''
+
+       '''
+       ableBankers = [x for x in bankersInRoom() if x.canReceiveCall(incomingCall)]
+       return ableBankers
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
