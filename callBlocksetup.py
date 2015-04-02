@@ -36,6 +36,10 @@ class banker(object):
         if state not in self.licenses:
             self.licenses.append(state)
 
+    def numLicenses(self):
+        '''returns the numbers of licenses a banker has'''
+        return len(self.licenses)
+
     def canReceiveCall(self, incomingCall):
         '''
         Checks if banker can accept call.
@@ -111,13 +115,18 @@ class callRoom(object):
        '''
 
        '''
-       ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall)]
+       ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
        return [x.getBankerName() for x in ableBankers]
 
 
 
+def takeCall(incomingCall, callRoom):
+    '''
+    this function assigns the incoming call to any banker who is available
+    and allowed to take the call
+    '''
 
-
+    
 
 
 
