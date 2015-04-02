@@ -5,18 +5,23 @@ class banker(object):
     representation of a banker
     '''
 
-    def __init__(self, specialty):
+    def __init__(self, bankerName, specialty):
         '''
         initializes a banker; saves all parameters as attributes
         of the instance.
+        bankerName: the name of the banker (first and last)
         specialty: the banker's specialty, input as a string
         licenses: a blank list of the states in which the banker holds licenses
         busy: a banker can only recieve a call when not busy, initially set to false
         '''
         
+        self.bankerName = bankerName
         self.licenses = []
         self.specialty = specialty
         self.busy = False
+
+    def getBankerName(self):
+        return self.bankerName
 
     def getSpecialty(self):
         '''returns the specialty of the banker''' 
@@ -39,7 +44,7 @@ class banker(object):
         Returns True if they can accept call and False otherwise
         '''
 
-        if incomingCall.getState() in self.getLicenses() and self.specialty == incomingCall.getSpecialty() and self.busy = False:
+        if incomingCall.getState() in self.getLicenses() and self.specialty == incomingCall.getSpecialty() and self.busy == False:
             return True
         else:
             return False
@@ -102,12 +107,12 @@ class callRoom(object):
         self.startTime = startTime
         self.dayTime = dayTime
 
-    def getBankers(incomingCall):
+    def getBankers(self, incomingCall):
        '''
 
        '''
-       ableBankers = [x for x in bankersInRoom() if x.canReceiveCall(incomingCall)]
-       return ableBankers
+       ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall)]
+       return [x.getBankerName() for x in ableBankers]
 
 
 
