@@ -54,7 +54,9 @@ class banker(object):
             return False
 
     def bankerTakesCall(self, incomingCall):
-        ''' '''
+        ''' 
+        if banker takes call switches the banker to busy for the specified amount of time 
+        '''
         if canRecieveCall(incomingCall):
             self.busy = True
 
@@ -92,6 +94,9 @@ class incomingCall(object):
 
     def callDuration(self):
         return self.duration
+    
+    def callReduces(self):
+        self.duration -= 1
 
 
 class callRoom(object):
@@ -111,12 +116,19 @@ class callRoom(object):
         self.startTime = startTime
         self.dayTime = dayTime
 
-    def getBankers(self, incomingCall):
+    def getBankersName(self, incomingCall):
        '''
 
        '''
        ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
        return [x.getBankerName() for x in ableBankers]
+
+    def getBankers(self, incomingCall):
+       '''
+
+       '''
+       return [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
+
 
 
 
@@ -125,7 +137,9 @@ def takeCall(incomingCall, callRoom):
     this function assigns the incoming call to any banker who is available
     and allowed to take the call
     '''
-
+    availableBankers = callRoom.getBankers(incomingCall)
+    minLicense = min([x.numLicenses for x in availableBankers])
+    return minLicense
     
 
 
