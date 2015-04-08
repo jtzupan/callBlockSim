@@ -57,8 +57,22 @@ class banker(object):
         ''' 
         if banker takes call switches the banker to busy for the specified amount of time 
         '''
-        if canRecieveCall(incomingCall):
+        if self.canReceiveCall(incomingCall):
             self.busy = True
+
+    def timeUnavailableLeft(self, incomingCall):
+        '''
+        sets the banker as unavailable for duration of call
+        '''
+        self.timeUnavailable = incomingCall.callDuration() 
+
+    def reduceCallLeft(self):
+        '''
+        reduces banker unavailability by one minute
+        '''
+        self.timeUnavailable -= 1
+        if self.timeUnavailable == 0:
+            self.busy = False
 
 
 
