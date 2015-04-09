@@ -1,5 +1,8 @@
 #this code will define a banker and a call
 
+import random
+#import pylab
+
 class banker(object):
     '''
     representation of a banker
@@ -124,11 +127,13 @@ class callRoom(object):
         bankersInRoom: a list of bankers in the room for current hour
         startTime: the starting hour of the call block (must be an float between 0 and 13)
         dayTime: am or pm 
+        inCall: an empty list of the bankers that are currently in a call
         '''
         self.bankersInRoom = bankersInRoom
         assert type(startTime) == float and startTime in range(0,13)
         self.startTime = startTime
         self.dayTime = dayTime
+        #self.InCall = []
 
     def getBankersName(self, incomingCall):
        '''
@@ -151,9 +156,18 @@ def takeCall(incomingCall, callRoom):
     this function assigns the incoming call to any banker who is available
     and allowed to take the call
     '''
+    #MEL_count will have to be kept outside of this function so it is not reset every time the function is called
+    MEL_count = 0
     availableBankers = callRoom.getBankers(incomingCall)
-    minLicense = min([x.numLicenses for x in availableBankers])
-    return minLicense
+    try:
+        minLicense = min([x.numLicenses() for x in availableBankers])
+    except:
+        MEL_count += 1
+        return 'No available bankers.  Current MEL count: %d' %MEL_count
+    bankersToChooseFrom = [x for x in availableBankers if x.numLicenses() == minLicense]
+    bankerTakesCall = random.choice(bankersToChooseFrom)
+    bankerTakesCall.bankerTakesCall(incomingCall)
+    return bankerTakesCall.getBankerName(), MEL_count
     
 
 
