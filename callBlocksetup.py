@@ -157,28 +157,41 @@ def takeCall(incomingCall, callRoom):
     and allowed to take the call
     '''
     #MEL_count will have to be kept outside of this function so it is not reset every time the function is called
-    MEL_count = 0
+    MEL = 0
     availableBankers = callRoom.getBankers(incomingCall)
     try:
         minLicense = min([x.numLicenses() for x in availableBankers])
     except:
-        MEL_count += 1
-        return 'No available bankers.  Current MEL count: %d' %MEL_count
+        MEL = 1
+        #return 'No available bankers.  Current MEL count: %d' %MEL_count
+        return MEL
     bankersToChooseFrom = [x for x in availableBankers if x.numLicenses() == minLicense]
     bankerTakesCall = random.choice(bankersToChooseFrom)
     bankerTakesCall.bankerTakesCall(incomingCall)
-    return bankerTakesCall.getBankerName(), MEL_count
+    #return bankerTakesCall.getBankerName(), MEL
+    return MEL
     
 
+def callSim(callList, room):
+#TODO: add functionality to go minute by minute
+    mel_count = 0
+    for call in callList:
+        #takeCall(call, room)
+        mel_count += takeCall(call, room)
+    return 'these calls resulted in %d MELs' %mel_count
 
 
 
+#help code to initialize bankers and calls
+tyler = banker('tyler', 'refi')
+tom = banker('tom', 'refi')
+za = banker('za', 'purch')
+hersh = banker('hersh', 'purch')
 
-
-
-
-
-
+tyler.addLicense('mi')
+tom.addLicense('mi')
+za.addLicense('mi')
+hersh.addLicense('mi')
 
 
 
