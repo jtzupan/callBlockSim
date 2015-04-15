@@ -136,18 +136,24 @@ class callRoom(object):
         #self.InCall = []
 
     def getBankersName(self, incomingCall):
-       '''
+        '''
 
-       '''
-       ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
-       return [x.getBankerName() for x in ableBankers]
+        '''
+        ableBankers = [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
+        return [x.getBankerName() for x in ableBankers]
 
     def getBankers(self, incomingCall):
-       '''
+        '''
+        returns a list of bankers whose current status is not busy
+        '''
+        return [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
 
-       '''
-       return [x for x in self.bankersInRoom if x.canReceiveCall(incomingCall) and x.busy == False]
+    def getBusyBankers(self):
+        '''
+        returns a list of bankers whose current status is busy 
+        ''' 
 
+        return [x for x in self.bankersInRoom if x.busy == True]
 
 
 
@@ -166,35 +172,48 @@ def takeCall(incomingCall, callRoom):
         #return 'No available bankers.  Current MEL count: %d' %MEL_count
         return MEL
     bankersToChooseFrom = [x for x in availableBankers if x.numLicenses() == minLicense]
-    bankerTakesCall = random.choice(bankersToChooseFrom)
-    bankerTakesCall.bankerTakesCall(incomingCall)
+    bankerToTakeCall = random.choice(bankersToChooseFrom)
+    bankerToTakeCall.bankerTakesCall(incomingCall)
+    bankerToTakeCall.timeUnavailableLeft(incomingCall)
     #return bankerTakesCall.getBankerName(), MEL
     return MEL
     
 
 def callSim(callList, room):
-#TODO: add functionality to go minute by minute
+    '''
+    this function is used to test different call assignment strategies
+    '''
     mel_count = 0
-    for call in callList:
-        #takeCall(call, room)
-        mel_count += takeCall(call, room)
+    for min in range(60):
+        for call in callList:
+            if call.receivedTime == min:
+                
+                #takeCall(call, room)
+                mel_count += takeCall(call, room)
+
+        for banker in room.getBusyBankers():
+            banker.reduceCallLeft()
+
+
     return 'these calls resulted in %d MELs' %mel_count
 
 
 
 #help code to initialize bankers and calls
-tyler = banker('tyler', 'refi')
-tom = banker('tom', 'refi')
-za = banker('za', 'purch')
-hersh = banker('hersh', 'purch')
+def main():
+    tyler = s.banker('tyler', 'refi')
+    tom = s.banker('tom', 'refi')
+    za = s.banker('za', 'purch')
+    hersh = s.banker('hersh', 'purch')
 
-tyler.addLicense('mi')
-tom.addLicense('mi')
-za.addLicense('mi')
-hersh.addLicense('mi')
+    tyler.addLicense('mi')
+    tom.addLicense('mi')
+    za.addLicense('mi')
+    hersh.addLicense('mi')
 
 
-
+if __name__ == '__main__':
+    main()
 
 
 
